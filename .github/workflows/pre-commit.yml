@@ -1,0 +1,41 @@
+---
+name: Pre-commit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5.1.1
+        with:
+          python-version: "3.13"
+
+      - name: Cache pre-commit environments
+        uses: actions/cache@d4323d4df104b02be50e7fb78c17a8343d59618b # v4.2.2
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-${{ runner.os }}-${{ env.pythonLocation }}-
+
+      - name: Install pre-commit
+        run: pip install pre-commit==4.1.0
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files

@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "astral-sh.ruff",
+    "ms-pyright.pyright",
+    "ms-python.mypy",
+    "ryanluker.vscode-coverage-gutters",
+    "redhat.vscode-yaml",
+    "davidanson.vscode-markdownlint"
+  ]
+}
